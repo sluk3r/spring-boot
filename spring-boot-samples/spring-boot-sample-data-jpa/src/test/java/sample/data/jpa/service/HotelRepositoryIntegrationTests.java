@@ -39,8 +39,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Oliver Gierke
  */
+// 从RunWith怎么过渡到SpringRunner， 也就是说，这里声明了SpringRunner后，RunWith注解怎么过渡到SpringRunner上来？
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest //这个SpringBootTest在什么时机下使用到？
 public class HotelRepositoryIntegrationTests {
 
 	@Autowired

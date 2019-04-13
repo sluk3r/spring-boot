@@ -107,6 +107,7 @@ public @interface SpringBootTest {
 	 * {@link WebEnvironment#MOCK}.
 	 * @return the type of web environment
 	 */
+	//SpringBoot里直接体现WebEnviroment，是不是有不在同一层次之嫌？
 	WebEnvironment webEnvironment() default WebEnvironment.MOCK;
 
 	/**

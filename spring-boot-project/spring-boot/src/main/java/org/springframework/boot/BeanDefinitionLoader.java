@@ -131,7 +131,7 @@ class BeanDefinitionLoader {
 
 	private int load(Object source) {
 		Assert.notNull(source, "Source must not be null");
-		if (source instanceof Class<?>) {
+		if (source instanceof Class<?>) { //有多种Source， 没有看到熟悉的XML。
 			return load((Class<?>) source);
 		}
 		if (source instanceof Resource) {
@@ -155,7 +155,7 @@ class BeanDefinitionLoader {
 			load(loader);
 		}
 		if (isComponent(source)) {
-			this.annotatedReader.register(source);
+			this.annotatedReader.register(source); //这里是注册下， 并没有大段的逻辑执行。
 			return 1;
 		}
 		return 0;

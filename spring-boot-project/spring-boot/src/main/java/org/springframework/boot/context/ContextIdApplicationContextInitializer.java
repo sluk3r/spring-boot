@@ -52,15 +52,20 @@ public class ContextIdApplicationContextInitializer implements
 	public void initialize(ConfigurableApplicationContext applicationContext) {
 		ContextId contextId = getContextId(applicationContext);
 		applicationContext.setId(contextId.getId());
+		//把这个ContextId注入进来的考虑是？
 		applicationContext.getBeanFactory().registerSingleton(ContextId.class.getName(),
 				contextId);
 	}
 
 	private ContextId getContextId(ConfigurableApplicationContext applicationContext) {
+		//什么情况下， 会触发设置这个ParentContext？
 		ApplicationContext parent = applicationContext.getParent();
+		// ApplicationContext中包含ContextId的Bean是一个什么场景？
 		if (parent != null && parent.containsBean(ContextId.class.getName())) {
+			// 这个是啥时候Set进来这样的Bean？
 			return parent.getBean(ContextId.class).createChildId();
 		}
+		//按想到那写那的思路来看的话， 很可能直接返回一个String类型的ContextId。
 		return new ContextId(getApplicationId(applicationContext.getEnvironment()));
 	}
 

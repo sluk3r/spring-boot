@@ -318,10 +318,10 @@ public class SpringApplication {
 					applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment);
-			context = createApplicationContext();
+			context = createApplicationContext();//以现在的理解来看， 应该是会有多个Context创建， Context之间也应该有关联关系。 看实现只有一个context对象。
 			exceptionReporters = getSpringFactoriesInstances(
 					SpringBootExceptionReporter.class,
-					new Class[] { ConfigurableApplicationContext.class }, context);
+					new Class[] { ConfigurableApplicationContext.class }, context); //exceptionReporters这样创建的考虑点是？有多个实现的考虑点是？
 			prepareContext(context, environment, listeners, applicationArguments,
 					printedBanner);
 			refreshContext(context);
@@ -363,6 +363,7 @@ public class SpringApplication {
 			ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
+		//这个名字刚开始看成是Analyze了，后来细看，才看到是执行初始化操作
 		applyInitializers(context);
 		listeners.contextPrepared(context);
 		if (this.logStartupInfo) {
@@ -371,6 +372,7 @@ public class SpringApplication {
 		}
 
 		// Add boot specific singleton beans
+		//原来Context中，还有这样Spring自己的私货。是不是一种泄露？用户不小心调整了的话， 会不会让整个SpringApp倒塌。
 		context.getBeanFactory().registerSingleton("springApplicationArguments",
 				applicationArguments);
 		if (printedBanner != null) {
@@ -631,6 +633,7 @@ public class SpringApplication {
 	 * Called to log startup information, subclasses may override to add additional
 	 * logging.
 	 * @param isRoot true if this application is the root of a context hierarchy
+	 * 看似一个简单的操作，后面也创建一个Logger对象
 	 */
 	protected void logStartupInfo(boolean isRoot) {
 		if (isRoot) {
@@ -667,6 +670,7 @@ public class SpringApplication {
 		if (this.mainApplicationClass == null) {
 			return logger;
 		}
+		//这个方法巧妙， 在SpringBoot类里， 可以创建App方面的Log
 		return LogFactory.getLog(this.mainApplicationClass);
 	}
 
@@ -681,7 +685,7 @@ public class SpringApplication {
 					"Loading source " + StringUtils.arrayToCommaDelimitedString(sources));
 		}
 		BeanDefinitionLoader loader = createBeanDefinitionLoader(
-				getBeanDefinitionRegistry(context), sources);
+				getBeanDefinitionRegistry(context), sources); //要做事前， 先生成对象，而不是直接调用某个方法执行。 封装。
 		if (this.beanNameGenerator != null) {
 			loader.setBeanNameGenerator(this.beanNameGenerator);
 		}

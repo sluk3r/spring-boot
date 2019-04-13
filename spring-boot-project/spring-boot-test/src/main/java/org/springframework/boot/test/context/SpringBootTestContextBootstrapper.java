@@ -102,7 +102,7 @@ public class SpringBootTestContextBootstrapper extends DefaultTestContextBootstr
 			context.setAttribute(ACTIVATE_SERVLET_LISTENER, true);
 		}
 		else if (webEnvironment != null && webEnvironment.isEmbedded()) {
-			context.setAttribute(ACTIVATE_SERVLET_LISTENER, false);
+			context.setAttribute(ACTIVATE_SERVLET_LISTENER, false); //也是这样地设置Attribute，看后续的使用情况。
 		}
 		return context;
 	}
